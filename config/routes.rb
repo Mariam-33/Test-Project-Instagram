@@ -3,7 +3,6 @@
 # App routes
 Rails.application.routes.draw do
   root 'pages#home'
-  get 'ajax/:action', to: 'ajax#:action', defaults: { format: 'json' }
   devise_for :users
 
   resources :users do
