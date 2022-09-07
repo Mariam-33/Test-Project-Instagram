@@ -55,7 +55,7 @@ class StoriesController < ApplicationController
     @story = current_user.stories.build(story_params)
     return unless @story.save
 
-    DeleteStoryJob.set(wait: 24.hours).perform_later(@story)
+    DeleteStoryJob.set(wait: 1.minute).perform_later(@story)
     return if params[:images].blank?
 
     params[:images].each do |img|

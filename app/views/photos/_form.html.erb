@@ -1,16 +1,14 @@
 <%= form_with(model: photo, local: true) do |form| %>
   <% if photo.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(phot.errors.count, "error") %> prohibited this post from being saved:</h2>
-
+      <h2><%= pluralize(photo.errors.count, "error") %> prohibited this post from being saved:</h2>
       <ul>
-      <% photo.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% photo.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
-
   <div class="field">
     <%= form.label :Image%>
     <%= form.file_field :image %>
