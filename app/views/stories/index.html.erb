@@ -1,0 +1,45 @@
+<div id = "post-form">
+  <h3>Stories</h3>
+  <% if current_user && current_user == @user%>
+    <%= link_to 'New story', new_story_path %>
+  <% end %>
+</div>
+<div class="container">
+  <div class="col" >
+    <div class="row pt-5" id="post-carousel">
+      <% @stories.each do |story|%>
+        <!-- carousel -->
+        <div class="box" id="post">
+          <p id = "post-title"><%=story.user.username%></p>
+          <div id="post-img">
+            <div id="carousel_<%= story.id %>" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <% story.photos.each_with_index do |photo, index| %>
+                  <div id="carousel_item_<%= index %>" class="carousel-item  <%= index == 0 ? 'active' : '' %>" data-bs-interval="3000">
+                    <%= image_tag photo.image.url(:standard)%><br>
+                  </div>
+                <% end %>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<%= story.id %>" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carousel_<%= story.id %>" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+          <div id = "story-check">
+            <%= link_to 'Show', story_path(story) %><br>
+            <% if current_user && current_user == story.user%>
+              <%= link_to 'Destroy', story_path(story),
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %>
+            <%end%>
+          </div>
+        </div>
+      <% end%>
+    </div>
+  </div>
+</div>

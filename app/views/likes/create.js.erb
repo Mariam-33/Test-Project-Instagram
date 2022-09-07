@@ -1,0 +1,4 @@
+$('#like-post-<%=@post.id.to_s%>').
+html('<%= link_to "Unlike", like_path(@like), method: :delete, remote: true%>');
+$("#like-post-count-<%=@post.id.to_s %>").
+html('<%= j render "posts/like_count", {post: @post}%>');

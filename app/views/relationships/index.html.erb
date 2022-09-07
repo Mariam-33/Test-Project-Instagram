@@ -1,0 +1,26 @@
+<div class="container box" id= "follow">
+  <div class="col" >
+    <h4>Followers</h4>
+    <div>
+      <ol>
+        <% @followers.each do |follow|%>
+          <% follower = User.find(follow.follower_id)%>
+          <li>
+            <%= link_to "#{follower.username}", user_path(follow.follower_id) %>
+          </li>
+        <% end%>
+        <ol>
+        </div>
+        <h4>Following</h4>
+        <div>
+          <ol>
+            <% @following.each do |follow|%>
+              <% followee = User.find(follow.followed_id)%>
+              <li>
+                <%= link_to "#{followee.username}", user_path(follow.followed_id) %>
+              </li>
+            <% end%>
+            <ol>
+            </div>
+          </div>
+        </div>

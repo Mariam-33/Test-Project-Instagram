@@ -1,0 +1,69 @@
+<div id = "post-form">
+  <h3>Posts</h3>
+  <% if current_user && current_user == @user%>
+    <%= link_to 'New post', new_post_path %>
+  <%end%>
+</div>
+<div class="container">
+  <div class="col" >
+    <div class="row pt-5" id="post-carousel">
+      <% @posts.each do |post|%>
+        <!-- carousel -->
+        <div class="box" id="post">
+          <p id = "post-title"><%=post.user.username%></p>
+          <div id="post-img">
+            <div id="carousel_<%= post.id %>" class="carousel slide" >
+              <div class="carousel-inner">
+                <% post.photos.each_with_index do |photo, index| %>
+                  <div id="carousel_item_<%= index %>" class="carousel-item  <%= index == 0 ? 'active' : '' %>" >
+                    <%= image_tag photo.image.url(:standard)%><br>
+                  </div>
+                <% end %>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<%= post.id %>" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carousel_<%= post.id %>" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+          <div id="post-content">
+            <div id="like-post-count-<%=post.id.to_s%>">
+              <%= render "posts/like_count", {post: post}%>
+            </div>
+            <div><span><%=post.user.username%></span>
+              <%=post.description%>
+            </div>
+            <br>
+            <h6>Comments</h6>
+            <p>
+              <% post.comments.each do |comment|%>
+                <h6><%= comment.user.username  %></h6>
+                <%= comment.statement  %>
+                <br>
+              <% end %>
+            </p>
+          </div>
+          <div id = "post-check">
+            <div id="like-post-<%=post.id.to_s%>">
+              <div class="link-to">
+                <%= render "posts/like_method", {is_liked: post.liked?(current_user), post: post}%>
+              </br>
+            </div>
+          </div>
+          <%= link_to 'Show', post_path(post)%>
+          <% if current_user && current_user == post.user%>
+            <%= link_to 'Edit', edit_post_path(post)%>
+            <%= link_to 'Destroy', post_path(post),
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' }%>
+          <% end%>
+        </div>
+      </div>
+    <% end%>
+  </div>
+</div>
+</div>

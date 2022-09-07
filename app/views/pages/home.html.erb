@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="col" >
+    <div class="row" id="profile-first">
+      <div class="col-4" id="top-corner">
+        <%= image_tag current_user.image_url(:standard).to_s%>
+      </div>
+      <div class="col-8" id="profile-dps">
+        <div class="row">
+          <p><%= current_user.username %></p>
+        </div>
+        <div class="row" id = "user-dps-2">
+          <%= form_for current_user do |f| %>
+            <span><%= current_user.account %></span>
+            <span>Followers: <%= current_user.followers.count%></span>
+            <span>Following: <%= current_user.following.count%></span>
+          <% end %>
+        </div>
+        <div class="row" id = "follow-link">
+          <%= link_to 'List of Follow accounts', user_relationships_path(current_user)%>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-5" id="post-carousel">
+      <% if @posts.present?%>
+        <% @posts.each do |post_i|%>
+          <% post_i.each do |post|%>
+            <!-- carousel -->
+            <div class="box" id="post">
+              <p id = "post-title"><%=post.user.username%></p>
+              <div id="post-img">
+                <div id="carousel_<%= post.id %>" class="carousel slide" >
+                  <div class="carousel-inner">
+                    <% post.photos.each_with_index do |photo, index| %>
+                      <div id="carousel_item_<%= index %>" class="carousel-item  <%= index == 0 ? 'active' : '' %>">
+                        <%= image_tag photo.image.url(:standard)%><br>
+                      </div>
+                    <% end %>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<%= post.id %>" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carousel_<%= post.id %>" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </div>
+              <div id="post-content">
+                <div id="like-post-count-<%=post.id.to_s%>">
+                  <%= render "posts/like_count", {post: post}%>
+                </div>
+                <div><span><%=post.user.username%></span>
+                  <%=post.description%>
+                </div>
+                <br>
+                <h6>Comments</h6>
+                <p>
+                  <% post.comments.each do |comment|%>
+                    <span><%= comment.user.username  %></span>
+                    <%= comment.statement  %>
+                    <br>
+                  <% end %>
+                </p>
+              </div>
+              <div id = "home-like">
+                <div id="like-post-<%=post.id.to_s%>">
+                  <div class="link-to">
+                    <%= render "posts/like_method", {is_liked: post.liked?(current_user), post: post}%>
+                  </br>
+                </div>
+              </div>
+              <%= link_to 'Show', post_path(post) %>
+              <% if current_user && current_user == post.user%>
+                <%= link_to 'Edit', edit_post_path(post), class:"btn btn-primary" %>
+                <%= link_to 'Destroy', post_path(post),
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' }, class:"btn btn-info" %>
+              <% end%>
+            </div>
+          </div>
+        <% end%>
+      <% end%>
+    <%end%>
+  </div>
+</div>
+</div>

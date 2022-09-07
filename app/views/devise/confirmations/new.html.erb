@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row" id="user">
+    <div class="col-lg-6 landing-center text-center d-flex align-items-center">
+      <div>
+        <div class="form-login box">
+          <h3 class="brand-name"> Instagram </h3>
+          <br>
+            <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <div class="form-group">
+              <%= f.email_field :email, autofocus: true, required: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), placeholder: "Email", class: "form-control" %>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Resend confirmation instructions", class: "btn btn-primary"%>
+            </div>
+            <% end %>
+        </div>
+        <div class="links box">
+        <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    <div>
+  </div>
+</div>
+
+
+

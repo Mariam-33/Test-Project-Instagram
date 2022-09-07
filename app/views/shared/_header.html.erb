@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">Instagram</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="form-inline my-2 my-lg-0 ml-md-auto" action = "/search">
+      <input class="form-control text-center mr-sm-2" name= "query" type="text" placeholder = "search" aria-label= "search">
+      <button class = "btn btn-success" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-md-auto">
+      <li class="nav-item">
+       <%= link_to "Home", root_path, class:"nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Profile", edit_user_registration_path, method: :get, class:"nav-link"%>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Post", posts_path, method: :get, class:"nav-link" %>
+      </li>
+      <li class="nav-item">
+         <%= link_to "Story", stories_path, method: :get, class:"nav-link" %>
+      </li>
+      <li class="nav-item">
+          <%= link_to "Log out", destroy_user_session_path, method: :delete, class:"nav-link" %>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+

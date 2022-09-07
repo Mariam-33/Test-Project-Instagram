@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="col" >
+    <div class="row" id="profile-first">
+      <div class="col-4" id="top-corner">
+        <%= image_tag @user.image_url(:standard).to_s%>
+      </div>
+      <div class="col-8" id="profile-dps">
+        <div class="row">
+          <p><%= @user.username %></p>
+        </div>
+        <div class="row" id = "user-dps-2">
+          <%= form_for current_user do |f| %>
+            <span><%= @user.account %></span>
+            <span>Followers: <%= @user.followers.count%></span>
+            <span>Following: <%= @user.following.count%></span>
+          <% end %>
+        </div>
+        <div>
+          <% if @user != current_user%>
+            <%= link_to 'Follow', user_relationships_path(@user), method: :post, class: 'btn btn-danger' unless @relationship.present?%>
+            <%= link_to 'Unfollow', relationship_path(@relationship.id) , method: :delete, class: 'btn btn-danger' if @relationship.present?%>
+          <% end %>
+          <div>
+            <% if @user.account == "Public" || @user.followers.find_by(follower_id: current_user.id).present? %>
+              <%= link_to 'Stories', user_stories_path(@user.id)%>
+              <%= link_to 'Posts', user_posts_path(@user.id)%>
+            <%end%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
