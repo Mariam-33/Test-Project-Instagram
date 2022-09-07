@@ -96,7 +96,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.active_record.dump_schema_after_migration = false
-  config.action_mailer.default_url_options = { host: 'billing-system-18575.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: 'railsinstagram-321.herokuapp.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
