@@ -76,6 +76,7 @@ gem 'cloudinary'
 gem 'devise'
 gem 'jquery-rails'
 gem 'letter_opener', group: :development
+gem 'pundit'
 gem 'rails-jquery-autocomplete'
 gem 'sidekiq', '~> 6.5'
 gem 'time_diff', '~> 0.3.0'

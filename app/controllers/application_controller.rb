@@ -2,21 +2,16 @@
 
 # Application controller
 class ApplicationController < ActionController::Base
-  before_action :configure_permitted_parameters, if: :devise_controller?
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  def routing_error(_error = 'Routing error', _status = :not_found, _exception = nil)
-    render file: 'public/404.html', status: :not_found, layout: false
-  end
+  include DeviseConfigurer
+  include RecordRescuable
+  include Pundit::Authorization
 
-  protected
+  before_action :authenticate_user!
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password username])
-    devise_parameter_sanitizer.permit(:sign_in, keys: %i[email password])
-    devise_parameter_sanitizer.permit(:account_update, keys: %i[email password username image bio account])
-  end
+  private
 
-  def record_not_found
-    redirect_to(request.referer || root_path, notice: 'Record Not Found')
+  def user_not_authorized
+    redirect_to(request.referer || root_path, notice: 'You are not authorized to perform this action.')
   end
 end

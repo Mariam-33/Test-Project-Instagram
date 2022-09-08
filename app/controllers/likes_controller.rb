@@ -2,17 +2,10 @@
 
 # Like controller
 class LikesController < ApplicationController
-  before_action :authenticate_user!
-
   def create
-    @like = current_user.likes.build(like_params)
-    if @like.save
-      @post = @like.post
-      flash[:notice] = 'Post liked'
-      respond_to :js
-    else
-      flash[:alert] = 'Something went wrong'
-    end
+    @like = current_user.likes.create(like_params)
+    @post = @like.post
+    respond_to :js
   end
 
   def destroy

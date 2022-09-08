@@ -2,27 +2,19 @@
 
 # Comment controller
 class CommentsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :find_comment, only: %i[edit update destroy]
-
+  before_action :find_comment_post, only: %i[edit update destroy]
+  before_action :authorize_user, only: %i[update destroy]
   def edit
     respond_to :js
   end
 
   def create
-    @comment = current_user.comments.build(comment_params)
-    if @comment.save
-      @post = @comment.post
-      flash[:notice] = 'Saved'
-      respond_to :js
-    else
-      flash[:alert] = 'Comment not created'
-    end
+    @comment = current_user.comments.create(comment_params)
+    @post = @comment.post
+    respond_to :js
   end
 
   def update
-    return unless @comment.user_id == current_user.id
-
     if @comment.update(comment_params)
       respond_to :js
     else
@@ -45,8 +37,12 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:statement, :post_id, :user_id)
   end
 
-  def find_comment
+  def find_comment_post
     @comment = Comment.find(params[:id])
     @post = @comment.post
+  end
+
+  def authorize_user
+    authorize @comment
   end
 end

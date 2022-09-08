@@ -72,6 +72,7 @@ class PostsController < ApplicationController
 
   def retrieve_comment
     @comments = Post.includes(:comment)
+    # byebug
     @comment = Comment.new
   end
 

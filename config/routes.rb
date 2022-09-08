@@ -20,5 +20,5 @@ Rails.application.routes.draw do
   resources :stories do
     resources :photos, only: [:create]
   end
-  get '*path', to: 'application#routing_error'
+  get '*path', to: redirect('/404')
 end
