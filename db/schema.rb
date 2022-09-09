@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_01_075658) do
+ActiveRecord::Schema.define(version: 2022_09_09_040307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.text "statement", null: false
+    t.text "statement", default: "", null: false
     t.bigint "post_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2022_09_01_075658) do
   end
 
   create_table "photos", force: :cascade do |t|
-    t.string "image", null: false
+    t.string "image", default: "Upload Image", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "photoable_type"
@@ -52,10 +52,11 @@ ActiveRecord::Schema.define(version: 2022_09_01_075658) do
   end
 
   create_table "relationships", force: :cascade do |t|
-    t.integer "follower_id"
-    t.integer "followed_id"
+    t.integer "follower_id", null: false
+    t.integer "followed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "accepted", default: false
   end
 
   create_table "stories", force: :cascade do |t|

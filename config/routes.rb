@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :stories, only: [:index]
     resources :posts, only: [:index]
   end
-  resources :relationships, only: [:destroy]
+  resources :relationships, only: %i[update destroy]
   get 'search', to: 'users#search'
   resources :posts do
     resources :photos, only: [:create]

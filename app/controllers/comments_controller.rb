@@ -2,7 +2,7 @@
 
 # Comment controller
 class CommentsController < ApplicationController
-  before_action :find_comment_post, only: %i[edit update destroy]
+  before_action :set_comment_post, only: %i[edit update destroy]
   before_action :authorize_user, only: %i[update destroy]
   def edit
     respond_to :js
@@ -37,7 +37,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:statement, :post_id, :user_id)
   end
 
-  def find_comment_post
+  def set_comment_post
     @comment = Comment.find(params[:id])
     @post = @comment.post
   end

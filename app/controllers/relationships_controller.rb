@@ -9,9 +9,15 @@ class RelationshipsController < ApplicationController
 
   def create
     other_user = User.find(params[:user_id])
-    @rel = Relationship.new(follower_id: current_user.id, followed_id: other_user.id)
-    @rel.save
+    @rel = Relationship.create(follower_id: current_user.id, followed_id: other_user.id)
     redirect_to user_path(other_user)
+  end
+
+  def update
+    @rel = Relationship.find(params[:id])
+    @rel.accepted = true
+    @rel.save
+    redirect_to user_path(@rel.follower_id)
   end
 
   def destroy

@@ -1,7 +1,7 @@
 <%= form_for @post, :html => {:multipart => true} do |f|%>
   <%= f.label :description%>
   <%= f.text_field :description%>
-  <%= file_field_tag "images[]", type: :file, multiple: true, required: true%><br>
+  <%= file_field_tag "images[]", type: :file, accept: ".png, .jpg, .jpeg, .webp", multiple: true, required: true%><br>
   <%= f.hidden_field :user_id, value: current_user.id%>
   <br>
   <%= f.submit "Submit", class: "btn btn-primary"%>

@@ -1,7 +1,7 @@
 <%= form_for @story, :html => {:multipart => true} do |f|%>
   <%= f.label :content%>
   <%= f.text_field :content%>
-  <%= file_field_tag "images[]", type: :file, multiple: true, required: true%><br>
+  <%= file_field_tag "images[]", type: :file, accept: ".png, .jpg, .jpeg, .webp", multiple: true, required: true%><br>
   <br>
   <%= f.submit "Submit", class: "btn btn-primary"%>
 <% end%>

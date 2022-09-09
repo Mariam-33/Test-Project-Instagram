@@ -11,7 +11,7 @@ body {
   background-position: -176px 0;
   height: 35px;
   width: 176px;
-  font-family: fantasy;
+  font-family:'Courier New', Courier, monospace;
   font-weight: bolder;
 }
 .navbar {
@@ -40,7 +40,7 @@ body {
   background-position: -176px 0;
   height: 35px;
   width: 176px;
-  font-family: fantasy;
+  font-family:'Courier New', Courier, monospace;
   font-weight: bolder;
   margin: 22px auto 8px;
 }
@@ -148,7 +148,7 @@ body {
 #follow {
     border: 1px solid #e6e6e6;
     border-radius: 24px;
-    padding-left: 120px;
+    padding-left: 12px;
     width :400px;
     align-items: center;
 
@@ -187,5 +187,20 @@ background-color: burlywood;
   padding-left: 80px;
   width: 500px;
   border-radius: 30px;
+}
+#follow-account {
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+  }
+  .account {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+  #request {
+    width: 300px;
+    align-content: center;
+  }
 }
 
