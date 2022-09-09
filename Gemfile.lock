@@ -323,7 +323,6 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   figaro
-  image_processing (>= 1.2)
   jbuilder (~> 2.5)
   jquery-rails
   letter_opener
