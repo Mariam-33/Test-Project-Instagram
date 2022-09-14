@@ -44,6 +44,8 @@
       <div class = "show-link box" id = "post-link">
         <div>
           <h6>Comments</h6>
+          <div id="comment-errors-<%=@post.id.to_s%>">
+          </div>
           <div id="comment-post-<%=@post.id.to_s%>">
             <p>
               <%= render "all_comment", {post: @post}%>

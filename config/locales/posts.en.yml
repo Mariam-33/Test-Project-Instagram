@@ -1,0 +1,11 @@
+en:
+  posts:
+    create:
+      notice: "Post created successfully"
+      alert: "Something went wrong, try again"
+    update:
+      notice: "Post updated successfully"
+      alert: "Something went wrong"
+    destroy:
+      notice: "Post is destroyed successfully"
+      alert: "Something went wrong"

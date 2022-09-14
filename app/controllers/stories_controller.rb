@@ -4,6 +4,7 @@
 class StoriesController < ApplicationController
   before_action :set_story, only: %i[show destroy]
   before_action :build_story, only: %i[create]
+  before_action :authorize_user, only: %i[show destroy]
   def index
     @user = if params[:user_id]
               User.find(params[:user_id])
@@ -11,6 +12,7 @@ class StoriesController < ApplicationController
               current_user
             end
     @stories = @user.stories.all.includes(:photos)
+    authorize @stories
   end
 
   def show; end
@@ -21,19 +23,20 @@ class StoriesController < ApplicationController
 
   def create
     if @story.save
-      flash[:notice] = 'Story saved'
+      flash[:notice] = t('.notice')
     else
-      flash[:alert] = 'Something went wrong'
+      flash[:alert] = t('.alert')
     end
     redirect_to stories_path
   end
 
   def destroy
-    @story.destroy
-    respond_to do |format|
-      format.html { redirect_to stories_url, notice: 'Story was successfully destroyed.' }
-      format.json { head :no_content }
+    if @story.destroy
+      flash[:notice] = t('.notice')
+    else
+      flash[:alert] = t('.alert')
     end
+    redirect_to stories_path
   end
 
   private
@@ -47,11 +50,17 @@ class StoriesController < ApplicationController
   end
 
   def build_story
-    @story = current_user.stories.create(story_params)
-    return if params[:images].blank?
+    ActiveRecord::Base.transaction do
+      @story = current_user.stories.build(story_params)
+      raise ActiveRecord::Rollback unless params[:images]
 
-    params[:images].each do |img|
-      @story.photos.create(image: img)
+      params[:images].each do |img|
+        @story.photos.build(image: img)
+      end
     end
+  end
+
+  def authorize_user
+    authorize @story
   end
 end

@@ -31,3 +31,5 @@
 
 en:
   hello: "Hello world"
+  notice: "You are not authorized to perform this action."
+  alert: "Record not found"

@@ -11,7 +11,7 @@
           </div>
           <% if current_user.account == 'Private'%>
             <% @relationship = Relationship.find_by follower_id: follower.id, followed_id: current_user.id%>
-            <div class = "col-8 align-right" id="request">
+            <div id="request">
               <%= button_to "Accept" , relationship_path(@relationship.id), class: 'btn btn-danger', method: :put unless @relationship.accepted %>
             </div>
           <%end%>

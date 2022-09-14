@@ -1,0 +1,6 @@
+en:
+  likes:
+    create:
+      alert: "Like post failed, try again"
+    destroy:
+      alert: "Disliking post failed, try again"

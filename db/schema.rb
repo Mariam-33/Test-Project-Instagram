@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_09_040307) do
+ActiveRecord::Schema.define(version: 2022_09_14_142108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
     t.text "statement", default: "", null: false
-    t.bigint "post_id"
-    t.bigint "user_id"
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
@@ -26,11 +26,12 @@ ActiveRecord::Schema.define(version: 2022_09_09_040307) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.bigint "post_id"
-    t.bigint "user_id"
+    t.bigint "post_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_likes_on_user_id_and_post_id", unique: true
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
@@ -38,14 +39,14 @@ ActiveRecord::Schema.define(version: 2022_09_09_040307) do
     t.string "image", default: "Upload Image", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "photoable_type"
-    t.integer "photoable_id"
+    t.string "photoable_type", null: false
+    t.integer "photoable_id", null: false
     t.index ["photoable_id", "photoable_type"], name: "index_photos_on_photoable_id_and_photoable_type"
   end
 
   create_table "posts", force: :cascade do |t|
-    t.string "description"
-    t.bigint "user_id"
+    t.string "description", limit: 500
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -56,12 +57,14 @@ ActiveRecord::Schema.define(version: 2022_09_09_040307) do
     t.integer "followed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "accepted", default: false
+    t.boolean "accepted", default: false, null: false
+    t.index ["accepted"], name: "index_relationships_on_accepted"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
   end
 
   create_table "stories", force: :cascade do |t|
-    t.string "content"
-    t.bigint "user_id"
+    t.string "content", limit: 500
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_stories_on_user_id"
@@ -84,10 +87,11 @@ ActiveRecord::Schema.define(version: 2022_09_09_040307) do
     t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
+    t.string "username", limit: 150, default: "", null: false
     t.string "image"
     t.text "bio"
     t.string "account", default: "Public", null: false
+    t.index ["account"], name: "index_users_on_account"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

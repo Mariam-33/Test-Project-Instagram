@@ -11,6 +11,6 @@ module RecordRescuable
   protected
 
   def handle_record_not_found
-    redirect_to(request.referer || root_path, notice: 'Record Not Found')
+    redirect_to(request.referer || root_path, alert: t('alert'))
   end
 end

@@ -10,8 +10,10 @@ class User < ApplicationRecord
   has_many :stories, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
-  has_many :followers, foreign_key: 'followed_id', class_name: 'Relationship', dependent: :destroy
-  has_many :following, foreign_key: 'follower_id', class_name: 'Relationship', dependent: :destroy
+  has_many :followers, foreign_key: 'followed_id', class_name: 'Relationship', dependent: :destroy,
+                       inverse_of: :followed
+  has_many :following, foreign_key: 'follower_id', class_name: 'Relationship', dependent: :destroy,
+                       inverse_of: :follower
   attr_accessor :image
 
   mount_uploader :image, ImageUploader
@@ -21,11 +23,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :trackable, :confirmable
   validates :username, presence: true, format: { with: /\A(?=.*[a-z])[a-z\d]+\Z/i },
-                       uniqueness: { case_sensitive: false }
+                       uniqueness: { case_sensitive: false }, length: { minimum: 5, maximum: 150 }
   validates :email, presence: true
   validates :account, presence: true
 
-  def self.check(keyword)
-    where('username LIKE ?', keyword.to_s).first
-  end
+  scope :search_by_username, ->(keyword) { where('username LIKE ?', keyword.to_s) }
 end

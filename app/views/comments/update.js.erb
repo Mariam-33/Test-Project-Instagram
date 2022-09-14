@@ -1,2 +1,3 @@
+$("#comment-errors-<%=@post.id.to_s%>").html("<%= flash.now[:alert] %>");
 $('#comment-post-<%=@post.id.to_s%>').
-  html('<%= j render "posts/all_comment", {post: @post}%>');
+html('<%= j render "posts/all_comment", {post: @post}%>');

@@ -4,6 +4,7 @@ require:
   # - rubocop-rspec # or rubocop-minitest
 
 AllCops:
+  NewCops: enable
   # Exclude auto-generated files by Rails
   TargetRubyVersion: 2.7
   TargetRailsVersion: 5.2

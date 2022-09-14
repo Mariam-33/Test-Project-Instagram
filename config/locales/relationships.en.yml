@@ -1,0 +1,11 @@
+en:
+  relationships:
+    create:
+      notice: "Followed successfully"
+      alert: "Something went wrong, try again"
+    update:
+      notice: "Follow request accepted successfully"
+      alert: "Something went wrong"
+    destroy:
+      notice: "Unfollowed successfully"
+      alert: "Something went wrong"

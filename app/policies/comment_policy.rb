@@ -9,15 +9,24 @@ class CommentPolicy < ApplicationPolicy
     @comment = comment
   end
 
+  def create?
+    if @comment.post.user.account == 'Private'
+      @user == @comment.post.user || @comment.post.user.followers.where(follower_id: @user.id, accepted: true).present?
+    else
+      true
+    end
+  end
+
+  def edit?
+    update?
+  end
+
   def update?
-    @post_id = @comment.post_id
-    @post = Post.find(@post_id)
-    @comment.user_id == @user.id || @post.user_id == @user.id
+    @post = Post.find(@comment.post_id)
+    @comment.user_id == @user.id || @comment.post.user_id == @user.id
   end
 
   def destroy?
-    @post_id = @comment.post_id
-    @post = Post.find(@post_id)
-    @comment.user_id == @user.id || @post.user_id == @user.id
+    update?
   end
 end

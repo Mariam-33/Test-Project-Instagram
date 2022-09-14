@@ -4,15 +4,17 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show edit update destroy]
   before_action :build_post, only: %i[create]
+  before_action :authorize_user, only: %i[show edit update destroy]
   before_action :update_setup, only: %i[update]
+
   def index
     @user = if params[:user_id]
               User.find(params[:user_id])
             else
               current_user
             end
-    @posts = @user.posts.all.includes(:photos).order('created_at DESC')
-    @post = Post.new
+    @posts = @user.posts.includes(:photos).order('created_at DESC')
+    authorize @posts
   end
 
   def show; end
@@ -24,28 +26,25 @@ class PostsController < ApplicationController
   def edit; end
 
   def create
-    if @post.valid?
-      flash[:notice] = 'Saved'
+    if @post.save
+      flash[:notice] = t('.notice')
     else
-      flash[:notice] = @post.errors.full_messages
-      @post.destroy
+      flash[:alert] = @post.errors.full_messages
     end
     redirect_to posts_path
   end
 
   def update
-    if @post.valid?
-      redirect_to(post_url(@post), notice: 'Post was successfully updated.')
-    else
-      flash[:notice] = @post.errors.full_messages
-      @post.destroy
-      redirect_to posts_path
-    end
+    redirect_to post_path
   end
 
   def destroy
-    @post.destroy
-    redirect_to(posts_path, notice: 'Post was successfully destroyed.')
+    if @post.destroy
+      flash[:notice] = t('.notice')
+    else
+      flash[:alert] = t('.alert')
+    end
+    redirect_to posts_path
   end
 
   private
@@ -59,21 +58,31 @@ class PostsController < ApplicationController
   end
 
   def build_post
-    @post = current_user.posts.create(post_params)
-    return if params[:images].blank?
+    ActiveRecord::Base.transaction do
+      @post = current_user.posts.build(post_params)
+      raise ActiveRecord::Rollback unless params[:images]
 
-    params[:images].each do |img|
-      @post.photos.create(image: img)
+      params[:images].each do |img|
+        @post.photos.build(image: img)
+      end
     end
   end
 
   def update_setup
-    @post.photos.delete_all
-    @post.update(post_params)
-    return if params[:images].blank?
-
-    params[:images].each do |img|
-      @post.photos.create(image: img)
+    ActiveRecord::Base.transaction do
+      params[:images]&.each do |img|
+        @post.photos.create(image: img)
+      end
+      if @post.update(post_params)
+        flash[:notice] = t('.notice')
+      else
+        flash[:alert] = @post.errors.full_messages
+        raise ActiveRecord::Rollback
+      end
     end
+  end
+
+  def authorize_user
+    authorize @post
   end
 end

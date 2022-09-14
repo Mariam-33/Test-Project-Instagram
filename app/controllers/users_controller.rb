@@ -10,13 +10,13 @@ class UsersController < ApplicationController
     @stories = @user.stories.includes(:photos)
   end
 
-  def search
+  def index
     keyword = params[:query]
-    @user = User.check(keyword)
+    @user = User.search_by_username(keyword).first
     if @user.present?
       redirect_to user_path(@user.id)
     else
-      flash[:alert] = 'User does not exist'
+      flash[:alert] = t('.alert')
       redirect_to root_path
     end
   end

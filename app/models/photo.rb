@@ -10,7 +10,7 @@ class Photo < ApplicationRecord
   private
 
   def image_type
-    errors[:base] << 'you tried uploading wrong file' unless image.content_type.in?(%w[image/png image/jpg image/jpeg
-                                                                                       image/webp])
+    errors.add(:base, 'you tried uploading wrong file') unless image.content_type.in?(%w[image/png image/jpg image/jpeg
+                                                                                         image/webp])
   end
 end

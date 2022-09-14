@@ -2,27 +2,47 @@
 
 # Relationships controller
 class RelationshipsController < ApplicationController
+  before_action :set_user, only: %i[create]
   def index
     @followers = current_user.followers
     @following = current_user.following
   end
 
   def create
-    other_user = User.find(params[:user_id])
-    @rel = Relationship.create(follower_id: current_user.id, followed_id: other_user.id)
-    redirect_to user_path(other_user)
+    @rel = Relationship.new(follower_id: current_user.id, followed_id: @user.id)
+    @rel.accept_request(@user)
+    if @rel.save
+      flash[:notice] = t('.notice')
+    else
+      flash[:alert] =  t('.alert')
+    end
+    redirect_to user_path(@user)
   end
 
   def update
     @rel = Relationship.find(params[:id])
     @rel.accepted = true
-    @rel.save
+    if @rel.save
+      flash[:notice] = t('.notice')
+    else
+      flash[:alert] = t('.alert')
+    end
     redirect_to user_path(@rel.follower_id)
   end
 
   def destroy
     @rel = Relationship.find(params[:id])
-    @rel.destroy
+    if @rel.destroy
+      flash[:notice] = t('.notice')
+    else
+      flash[:alert] = t('.alert')
+    end
     redirect_to user_path(@rel.followed_id)
+  end
+
+  private
+
+  def set_user
+    @user = User.find(params[:user_id])
   end
 end

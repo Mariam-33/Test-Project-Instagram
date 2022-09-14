@@ -4,7 +4,8 @@
 class Story < ApplicationRecord
   belongs_to :user
   has_many :photos, as: :photoable, dependent: :destroy
-  after_create :delete_story
+  validates :content, length: { maximum: 500 }
+  after_create_commit :delete_story
 
   private
 

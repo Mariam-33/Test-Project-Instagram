@@ -1,0 +1,8 @@
+en:
+  stories:
+    create:
+      notice: "Story saved"
+      alert: "Something went wrong"
+    destroy:
+      notice: "Story is destroyed successfully"
+      alert: "Something went wrong"

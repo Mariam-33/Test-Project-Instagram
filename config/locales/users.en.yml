@@ -1,0 +1,4 @@
+en:
+  users:
+    index:
+      alert: "User does not exist"

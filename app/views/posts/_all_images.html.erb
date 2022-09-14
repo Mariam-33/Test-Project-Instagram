@@ -1,0 +1,5 @@
+<% post.photos.each_with_index do |photo, index| %>
+  <div id="carousel_item_<%= index %>" class="carousel-item  <%= index == 0 ? 'active' : '' %>">
+    <%= image_tag photo.image.url(:standard)%><br>
+  </div>
+<% end %>
