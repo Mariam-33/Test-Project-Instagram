@@ -10,11 +10,9 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def create?
-    if @comment.post.user.account == 'Private'
-      @user == @comment.post.user || @comment.post.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
+    @comment.post.user.Public? || @user == @comment.post.user || @comment.post.user.followers.exists?(
+      follower_id: @user.id, accepted: true
+    )
   end
 
   def edit?
@@ -22,7 +20,6 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def update?
-    @post = Post.find(@comment.post_id)
     @comment.user_id == @user.id || @comment.post.user_id == @user.id
   end
 

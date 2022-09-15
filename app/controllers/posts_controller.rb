@@ -4,7 +4,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show edit update destroy]
   before_action :build_post, only: %i[create]
-  before_action :authorize_user, only: %i[show edit update destroy]
+  before_action :authorize_post, only: %i[show edit update destroy]
   before_action :update_setup, only: %i[update]
 
   def index
@@ -13,8 +13,7 @@ class PostsController < ApplicationController
             else
               current_user
             end
-    @posts = @user.posts.includes(:photos).order('created_at DESC')
-    authorize @posts
+    @posts = policy_scope(@user.posts.includes(:photos).order('created_at DESC'))
   end
 
   def show; end
@@ -58,13 +57,11 @@ class PostsController < ApplicationController
   end
 
   def build_post
-    ActiveRecord::Base.transaction do
-      @post = current_user.posts.build(post_params)
-      raise ActiveRecord::Rollback unless params[:images]
+    @post = current_user.posts.build(post_params)
+    return unless params[:images]
 
-      params[:images].each do |img|
-        @post.photos.build(image: img)
-      end
+    params[:images].each do |img|
+      @post.photos.build(image: img)
     end
   end
 
@@ -82,7 +79,7 @@ class PostsController < ApplicationController
     end
   end
 
-  def authorize_user
+  def authorize_post
     authorize @post
   end
 end

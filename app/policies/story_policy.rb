@@ -10,28 +10,26 @@ class StoryPolicy < ApplicationPolicy
   end
 
   def index?
-    return true unless @story.exists?
-
-    if @story.first.user.account == 'Private'
-      @user == @story.first.user || @story.first.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
+    true
   end
 
   def show?
-    if @story.user.account == 'Private'
-      @user == @story.user || @story.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
-  end
-
-  def update?
-    @user == @story.user
+    @story.user.Public? || @story.user.followers.exists?(follower_id: @user.id, accepted: true)
   end
 
   def destroy?
-    update?
+    @user == @post.user
+  end
+
+  class Scope < Scope
+    def resolve
+      if @user == @scope.first.user || @scope.first.user.Public? || @scope.first.user.followers.exists?(
+        follower_id: @user.id, accepted: true
+      )
+        scope.all
+      else
+        []
+      end
+    end
   end
 end

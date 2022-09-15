@@ -10,7 +10,6 @@ class RelationshipsController < ApplicationController
 
   def create
     @rel = Relationship.new(follower_id: current_user.id, followed_id: @user.id)
-    @rel.accept_request(@user)
     if @rel.save
       flash[:notice] = t('.notice')
     else

@@ -1,4 +1,4 @@
-$('#like-post-<%=@post.id.to_s%>').
-  html('<%= link_to "like", post_likes_path(@post), method: :post, remote: true%>');
-$("#like-post-count-<%=@post.id.to_s %>").
- html('<%= j render "posts/like_count", {post: @post}%>');
+$('#like-post-<%=@like.post.id.to_s%>').
+html('<%= link_to "like", post_likes_path(@like.post), method: :post, remote: true%>');
+$("#like-post-count-<%=@like.post.id.to_s %>").
+html('<%= j render "posts/like_count", {post: @like.post}%>');

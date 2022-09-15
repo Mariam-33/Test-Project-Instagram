@@ -1,4 +1,4 @@
-$("#comment-errors-<%=@post.id.to_s%>").html("<%= flash.now[:alert] %>");
-$('#comment-post-<%=@post.id.to_s%>').
-html('<%= j render "posts/all_comment", {post: @post}%>')
-$('#comment-form-post-<%=@post.id.to_s%> #comment_statement').val("")
+$("#comment-errors-<%=@comment.post.id.to_s%>").html("<%= flash.now[:alert] %>");
+$('#comment-post-<%=@comment.post.id.to_s%>').
+html('<%= j render "posts/all_comment", {post: @comment.post}%>')
+$('#comment-form-post-<%=@comment.post.id.to_s%> #comment_statement').val("")

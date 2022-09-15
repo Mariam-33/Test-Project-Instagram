@@ -1,7 +1,6 @@
-<%= form_for [@post, @comment], remote: true do |f|%>
+<%= form_for [post, @comment], remote: true do |f|%>
   <%= f.text_field :statement, required: true%>
   <%= f.hidden_field :user_id, value: current_user.id%>
-  <%= f.hidden_field :post_id, value: @post.id%>
+  <%= f.hidden_field :post_id, value: post.id%>
   <%= f.submit "Submit"%>
 <% end%>
-

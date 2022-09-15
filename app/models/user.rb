@@ -28,5 +28,7 @@ class User < ApplicationRecord
   validates :account, presence: true
   validates :bio, length: { maximum: 250 }
 
-  scope :search_by_username, ->(keyword) { where('username LIKE ?', keyword.to_s) }
+  enum account: { Public: 0, Private: 1 }
+
+  scope :search_by_username, ->(keyword) { where('username ILIKE ?', "%#{keyword}%") }
 end

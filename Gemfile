@@ -81,3 +81,5 @@ gem 'rails-jquery-autocomplete'
 gem 'sidekiq', '~> 6.5'
 gem 'time_diff', '~> 0.3.0'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+gem 'ransack', '~> 2.5'

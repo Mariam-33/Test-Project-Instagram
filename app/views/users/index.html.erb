@@ -1,0 +1,16 @@
+<div class="container box" id= "follow">
+  <div class="col" >
+    <h4>Search results</h4>
+    <div>
+      <% @users.each do |user|%>
+        <div class="col d-flex align-item-left" id="follow-account">
+          <%= image_tag user.image_url(:standard).to_s%>
+          <div class="account">
+            <%= link_to "#{user.username}", user_path(user.id) %>
+          </div>
+        </div>
+        <br>
+      <% end%>
+    </div>
+  </div>
+</div>

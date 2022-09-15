@@ -3,14 +3,13 @@
 # Comment controller
 class CommentsController < ApplicationController
   before_action :set_comment_post, only: %i[edit update destroy]
-  before_action :authorize_user, only: %i[edit update destroy]
+  before_action :authorize_comment, only: %i[edit update destroy]
   def edit
     respond_to :js
   end
 
   def create
     @comment = current_user.comments.build(comment_params)
-    @post = Post.find(comment_params[:post_id])
     authorize @comment
     if @comment.save
       respond_to :js
@@ -44,10 +43,9 @@ class CommentsController < ApplicationController
 
   def set_comment_post
     @comment = Comment.find(params[:id])
-    @post = @comment.post
   end
 
-  def authorize_user
+  def authorize_comment
     authorize @comment
   end
 end

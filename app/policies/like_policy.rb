@@ -10,11 +10,9 @@ class LikePolicy < ApplicationPolicy
   end
 
   def create?
-    if @like.post.user.account == 'Private'
-      @user == @like.post.user || @like.post.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
+    @like.post.user.Public? || @user == @like.post.user || @like.post.user.followers.exists?(
+      follower_id: @user.id, accepted: true
+    )
   end
 
   def destroy?

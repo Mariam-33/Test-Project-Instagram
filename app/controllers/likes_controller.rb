@@ -6,7 +6,6 @@ class LikesController < ApplicationController
     @like = current_user.likes.build(like_params)
     authorize @like
     if @like.save
-      @post = @like.post
       respond_to :js
     else
       redirect_to(post_path, alert: t('.alert'))
@@ -15,7 +14,6 @@ class LikesController < ApplicationController
 
   def destroy
     @like = Like.find(params[:id])
-    @post = @like.post
     authorize @like
     if @like.destroy
       respond_to :js

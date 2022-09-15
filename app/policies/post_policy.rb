@@ -10,21 +10,15 @@ class PostPolicy < ApplicationPolicy
   end
 
   def index?
-    return true unless @post.exists?
-
-    if @post.first.user.account == 'Private'
-      @user == @post.first.user || @post.first.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
+    true
   end
 
   def show?
-    if @post.user.account == 'Private'
-      @user == @post.user || @post.user.followers.where(follower_id: @user.id, accepted: true).present?
-    else
-      true
-    end
+    @post.user.Public? || @post.user.followers.exists?(follower_id: @user.id, accepted: true)
+  end
+
+  def edit?
+    update?
   end
 
   def update?
@@ -33,5 +27,17 @@ class PostPolicy < ApplicationPolicy
 
   def destroy?
     update?
+  end
+
+  class Scope < Scope
+    def resolve
+      if @user == @scope.first.user || @scope.first.user.Public? || @scope.first.user.followers.exists?(
+        follower_id: @user.id, accepted: true
+      )
+        scope.all
+      else
+        []
+      end
+    end
   end
 end
