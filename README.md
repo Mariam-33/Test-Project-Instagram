@@ -16,9 +16,9 @@ Things you may want to cover:
 - Database creation
   Postgress has been used in this Project, new database can be created using following commands.
 
-rails db:drop
-rails db:create
-rails db:migrate
+  rails db:drop
+  rails db:create
+  rails db:migrate
 
 - Database initialization
   Database with initial data can be load by running.
