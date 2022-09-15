@@ -7,11 +7,7 @@
         <div id="post-img">
           <div id="carousel_<%= @story.id %>" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <% @story.photos.each_with_index do |photo, index| %>
-                <div id="carousel_item_<%= index %>" class="carousel-item  <%= index == 0 ? 'active' : '' %>" data-bs-interval="3000">
-                  <%= image_tag photo.image.url(:standard)%><br>
-                </div>
-              <% end %>
+              <%= render "posts/all_images", {post: @story}%>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<%= @story.id %>" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -27,4 +23,3 @@
     </div>
   </div>
 </div>
-

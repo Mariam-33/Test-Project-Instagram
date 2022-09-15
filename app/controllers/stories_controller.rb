@@ -11,7 +11,7 @@ class StoriesController < ApplicationController
             else
               current_user
             end
-    @stories = @user.stories.all.includes(:photos)
+    @stories = @user.stories.includes(:photos).order('created_at DESC')
     authorize @stories
   end
 

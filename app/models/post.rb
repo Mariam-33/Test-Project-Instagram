@@ -16,6 +16,6 @@ class Post < ApplicationRecord
   private
 
   def validate_image_count
-    errors.add(:base, 'Please attach images within range of 1-10 per post') if photos.size > 4 || photos.empty?
+    errors.add(:base, 'Please attach images within range of 1-10 per post') if photos.size > 10 || photos.empty?
   end
 end

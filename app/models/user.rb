@@ -23,9 +23,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :trackable, :confirmable
   validates :username, presence: true, format: { with: /\A(?=.*[a-z])[a-z\d]+\Z/i },
-                       uniqueness: { case_sensitive: false }, length: { minimum: 5, maximum: 150 }
+                       uniqueness: { case_sensitive: false }, length: { minimum: 3, maximum: 150 }
   validates :email, presence: true
   validates :account, presence: true
+  validates :bio, length: { maximum: 250 }
 
   scope :search_by_username, ->(keyword) { where('username LIKE ?', keyword.to_s) }
 end
