@@ -2,7 +2,7 @@
 
 # Comment controller
 class CommentsController < ApplicationController
-  before_action :set_comment_post, only: %i[edit update destroy]
+  before_action :set_comment, only: %i[edit update destroy]
   before_action :authorize_comment, only: %i[edit update destroy]
   def edit
     respond_to :js
@@ -22,7 +22,6 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       respond_to :js
     else
-      @post = Post.find(comment_params[:post_id])
       flash.now[:alert] = @comment.errors.full_messages
     end
   end
@@ -41,7 +40,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:statement, :post_id, :user_id)
   end
 
-  def set_comment_post
+  def set_comment
     @comment = Comment.find(params[:id])
   end
 

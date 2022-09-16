@@ -8,7 +8,7 @@ Things you may want to cover:
   Rails version: Rails 5.2.8.1
 
 - System dependencies
-  Postgresql: for db
+  Postgresql: 14.5 for db
   Devise: for user authentication
   pundit:f or authorization
   Cloundinary

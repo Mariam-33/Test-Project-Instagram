@@ -9,7 +9,7 @@
           <div class="account">
             <%= link_to "#{follower.username}", user_path(follow.follower_id) %>
           </div>
-          <% if current_user.account == 'Private'%>
+          <% if current_user.Private?%>
             <% @relationship = Relationship.find_by follower_id: follower.id, followed_id: current_user.id%>
             <div id="request">
               <%= button_to "Accept" , relationship_path(@relationship.id), class: 'btn btn-danger', method: :put unless @relationship.accepted %>

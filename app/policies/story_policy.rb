@@ -9,10 +9,6 @@ class StoryPolicy < ApplicationPolicy
     @story = story
   end
 
-  def index?
-    true
-  end
-
   def show?
     @story.user.Public? || @story.user.followers.exists?(follower_id: @user.id, accepted: true)
   end
@@ -23,13 +19,18 @@ class StoryPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if @user == @scope.first.user || @scope.first.user.Public? || @scope.first.user.followers.exists?(
-        follower_id: @user.id, accepted: true
-      )
+      return [] if scope.empty?
+
+      if verify_user_for_story
         scope.all
       else
         []
       end
+    end
+
+    def verify_user_for_story
+      scope.first.user.Public? || scope.first.user.followers.exists?(follower_id: @user.id,
+                                                                     accepted: true) || scope.first.user == @user
     end
   end
 end
