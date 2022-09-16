@@ -14,7 +14,7 @@ class StoryPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @user == @post.user
+    @user == @story.user
   end
 
   class Scope < Scope
