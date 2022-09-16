@@ -10,7 +10,7 @@ class PostPolicy < ApplicationPolicy
   end
 
   def show?
-    @post.user.Public? || @post.user.followers.exists?(follower_id: @user.id, accepted: true)
+    @post.user.Public? || @post.user.followers.exists?(follower_id: @user.id, accepted: true) || @post.user == @user
   end
 
   def edit?

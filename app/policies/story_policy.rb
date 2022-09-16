@@ -10,7 +10,7 @@ class StoryPolicy < ApplicationPolicy
   end
 
   def show?
-    @story.user.Public? || @story.user.followers.exists?(follower_id: @user.id, accepted: true)
+    @story.user.Public? || @story.user.followers.exists?(follower_id: @user.id, accepted: true) || @story.user == @user
   end
 
   def destroy?
