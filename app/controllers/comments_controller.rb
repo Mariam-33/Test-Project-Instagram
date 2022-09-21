@@ -4,6 +4,7 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[edit update destroy]
   before_action :authorize_comment, only: %i[edit update destroy]
+  protect_from_forgery except: :edit
   def edit
     respond_to :js
   end
@@ -22,7 +23,7 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       respond_to :js
     else
-      flash.now[:alert] = @comment.errors.full_messages
+      flash.now[:alert] = 'Something went wrong'
     end
   end
 

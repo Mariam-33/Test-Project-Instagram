@@ -43,10 +43,17 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 end
 group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rails-controller-testing'
+  gem 'rspec-rails'
   gem 'rubocop'
   gem 'rubocop-minitest' # or gem 'rubocop-rspec' depending on your test suite
   gem 'rubocop-performance'
   gem 'rubocop-rails'
+  gem 'shoulda-callback-matchers', '~> 1.1', '>= 1.1.4'
+  gem 'shoulda-matchers', '~> 5.1'
+  gem 'simplecov', require: false
 end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
@@ -65,7 +72,8 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
+  # gem 'chromedriver-helper'
+  gem 'webdrivers'
 end
 gem 'figaro'
 gem 'rmagick'
@@ -78,8 +86,7 @@ gem 'jquery-rails'
 gem 'letter_opener', group: :development
 gem 'pundit'
 gem 'rails-jquery-autocomplete'
+gem 'ransack', '~> 2.5'
 gem 'sidekiq', '~> 6.5'
 gem 'time_diff', '~> 0.3.0'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-
-gem 'ransack', '~> 2.5'
