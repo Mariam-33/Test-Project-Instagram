@@ -7,7 +7,10 @@ require 'devise'
 RSpec.describe CommentsController, type: :request do
   let!(:photo) { create(:photo) }
   let(:user) { create(:user) }
-  let(:unauth_user) { User.create(username: Faker::Name.name, email: Faker::Internet.email, password: 'test321') }
+  let(:unauth_user) do
+    User.create(username: Faker::Name.name, email: Faker::Internet.email,
+                password: Faker::Alphanumeric.alphanumeric(number: 8))
+  end
   let(:post2) { Post.create(id: 1, description: Faker::Lorem.sentence, user_id: user.id) }
   let(:comment) { Comment.create(id: 1, statement: Faker::Lorem.sentence, post_id: post2.id, user_id: post2.user.id) }
   before(:each) do
