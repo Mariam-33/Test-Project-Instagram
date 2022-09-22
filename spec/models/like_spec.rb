@@ -2,14 +2,17 @@
 
 require 'rails_helper'
 RSpec.describe Like, type: :model do
-  let!(:photo) { create(:photo) }
-  context 'Associations' do
-    it { is_expected.to belong_to(:user) }
-    it { is_expected.to belong_to(:post) }
+  describe 'Testing Associations' do
+    context 'Model Associations' do
+      it { is_expected.to belong_to(:user) }
+      it { is_expected.to belong_to(:post) }
+    end
   end
-
-  context 'validations' do
-    subject { build(:like) }
-    it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:post_id) }
+  describe 'Testing validations' do
+    context 'validations' do
+      let!(:photo) { create(:photo) }
+      subject { build(:like) }
+      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:post_id) }
+    end
   end
 end

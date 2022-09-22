@@ -3,11 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Photo, type: :model do
-  context 'Associations' do
-    it { should belong_to(:photoable) }
+  describe 'Testing Associations' do
+    context 'Model Associations' do
+      it { should belong_to(:photoable) }
+    end
   end
-  describe 'validations' do
-    it { is_expected.to validate_presence_of(:image) }
+  describe 'Testing validations' do
+    context 'validations' do
+      it { is_expected.to validate_presence_of(:image) }
+    end
     context 'positive validations' do
       it 'Image is valid as its type valid(png, jpeg, jpg, webp)' do
         photo = build(:photo)
