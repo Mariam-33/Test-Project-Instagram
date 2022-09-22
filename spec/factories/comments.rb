@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :comment do
-    statement { 'Welcome to testing' }
+    statement { Faker::Lorem.sentence }
     post
     user
   end

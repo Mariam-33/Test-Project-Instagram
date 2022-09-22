@@ -3,17 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  let(:user) { create(:user) }
-  let(:like) { Like.create(id: 1, user_id: 3, post_id: 1) }
   let!(:photo) { create(:photo) }
-  let(:photo_two) { Photo.create(id: 2, photoable_type: 'Post', photoable_id: 5) }
   context 'Associations' do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to have_many(:photos).dependent(:destroy) }
     it { is_expected.to have_many(:comments).dependent(:destroy) }
     it { is_expected.to have_many(:likes).dependent(:destroy) }
   end
-
   context 'validations' do
     it { is_expected.to validate_length_of(:description).is_at_least(0) }
     it { is_expected.to validate_length_of(:description).is_at_most(500) }

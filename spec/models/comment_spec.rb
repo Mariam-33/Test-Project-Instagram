@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
   let!(:photo) { create(:photo) }
-  let!(:user) { create(:user) }
   context 'Associations' do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:post) }

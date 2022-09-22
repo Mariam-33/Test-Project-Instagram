@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :post do
     id { 1 }
-    description { 'Life is beautiful' }
+    description { Faker::Lorem.sentence }
     user
   end
   trait :invalid_post do
