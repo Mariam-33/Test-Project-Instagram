@@ -11,7 +11,6 @@ RSpec.describe Story, type: :model do
   end
   describe 'Testing Validations' do
     context 'validations' do
-      it { is_expected.to validate_length_of(:content).is_at_least(0) }
       it { is_expected.to validate_length_of(:content).is_at_most(500) }
     end
     context 'Positive validations' do
@@ -19,14 +18,14 @@ RSpec.describe Story, type: :model do
         story = build(:story)
         create(:photo, :story_photo)
         story.save
-        expect(story.photos.count >= 1).to eq(true)
+        expect(!story.photos.nil?).to eq(true)
       end
     end
     context 'Negative validations' do
       it 'validates absence of photos' do
         story = build(:story, :invalid_story)
         story.save
-        expect(story.photos.count.nil?).to eq(false)
+        expect(story.photos.nil?).to eq(false)
         expect(story.errors.full_messages).to include('Please attach images with story')
       end
     end

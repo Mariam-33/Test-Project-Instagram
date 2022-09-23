@@ -18,12 +18,22 @@ RSpec.describe User, type: :model do
       it { is_expected.to validate_presence_of(:username) }
       it { is_expected.to validate_length_of(:username).is_at_least(3) }
       it { is_expected.to validate_length_of(:username).is_at_most(150) }
-      it { should_not allow_value('Invalid_1234').for(:username) }
-      it { should allow_value('ValidName').for(:username) }
       it { is_expected.to validate_uniqueness_of(:username).ignoring_case_sensitivity }
       it { is_expected.to validate_presence_of(:account) }
       it { is_expected.to validate_presence_of(:email) }
       it { is_expected.to validate_length_of(:bio).is_at_most(250) }
+    end
+    context 'Positive validation for format matching' do
+      it 'Username is valid' do
+        user = build(:user, :valid_username)
+        expect(user.save).to eq(true)
+      end
+    end
+    context 'Negative validation for format matching' do
+      it 'Username is Invalid' do
+        user = build(:user, :invalid_username)
+        expect(user.save).to eq(false)
+      end
     end
   end
   describe 'Testing Enum' do
@@ -37,7 +47,7 @@ RSpec.describe User, type: :model do
   describe 'Testing Scopes' do
     context 'Scope' do
       it 'returns the matching users list' do
-        expect(User.search_by_username('TestUser').pluck(:id)[0].eql?(1))
+        expect(User.search_by_username('TestUser').pluck(:id).first.eql?(1))
       end
     end
   end

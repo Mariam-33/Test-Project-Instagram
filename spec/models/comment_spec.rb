@@ -22,8 +22,12 @@ RSpec.describe Comment, type: :model do
         end
       end
       context 'Negative validations' do
-        it 'Invalid length of comment' do
-          comment = build(:comment, :invalid_text)
+        it 'Invalid length of comment i.e. shorter' do
+          comment = build(:comment, :invalid_text_min)
+          expect(comment.save).to eq(false)
+        end
+        it 'Invalid length of comment i.e. longer' do
+          comment = build(:comment, :invalid_text_max)
           expect(comment.save).to eq(false)
         end
       end

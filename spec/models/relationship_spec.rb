@@ -17,7 +17,7 @@ RSpec.describe Relationship, type: :model do
         User.create(id: rel.followed_id, username: 'Followed', email: Faker::Internet.email,
                     password: Faker::Alphanumeric.alphanumeric(number: 8))
         rel.save
-        is_expected.to validate_uniqueness_of(:follower_id).scoped_to(:followed_id)
+        is_expected.to validate_uniqueness_of(:follower_id).scoped_to(:followed_id).ignoring_case_sensitivity
       }
     end
   end

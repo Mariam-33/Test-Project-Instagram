@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :photo do
-    id { 1 }
     image { fixture_file_upload(Rails.root.join('spec/fixtures/xabout.png'), 'image/png') }
     photoable_type { 'Post' }
     photoable_id { 1 }

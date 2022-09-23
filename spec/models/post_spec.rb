@@ -14,21 +14,20 @@ RSpec.describe Post, type: :model do
   end
   describe 'Testing validations' do
     context 'validations' do
-      it { is_expected.to validate_length_of(:description).is_at_least(0) }
       it { is_expected.to validate_length_of(:description).is_at_most(500) }
     end
     context 'Positive validations' do
       it 'validates presence of photos' do
         post = build(:post)
         post.save
-        expect(post.photos.count >= 1).to eq(true)
+        expect(!post.photos.nil?).to eq(true)
       end
     end
     context 'Negative validations' do
       it 'validates absence of photos' do
         post = build(:post, :invalid_post)
         post.save
-        expect(post.photos.count.nil?).to eq(false)
+        expect(post.photos.nil?).to eq(false)
       end
     end
   end

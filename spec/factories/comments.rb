@@ -6,7 +6,10 @@ FactoryBot.define do
     post
     user
   end
-  trait :invalid_text do
-    statement { 'Hi' }
+  trait :invalid_text_min do
+    statement { Faker::Lorem.characters(number: 2) }
+  end
+  trait :invalid_text_max do
+    statement { Faker::Lorem.characters(number: 501) }
   end
 end

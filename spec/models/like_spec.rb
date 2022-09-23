@@ -12,7 +12,7 @@ RSpec.describe Like, type: :model do
     context 'validations' do
       let!(:photo) { create(:photo) }
       subject { build(:like) }
-      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:post_id) }
+      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:post_id).ignoring_case_sensitivity }
     end
   end
 end

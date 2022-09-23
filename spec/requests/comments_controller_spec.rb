@@ -6,13 +6,10 @@ require 'devise'
 
 RSpec.describe CommentsController, type: :request do
   let!(:photo) { create(:photo) }
-  let(:user) { create(:user) }
-  let(:unauth_user) do
-    User.create(username: Faker::Name.name, email: Faker::Internet.email,
-                password: Faker::Alphanumeric.alphanumeric(number: 8))
-  end
-  let(:post2) { Post.create(id: 1, description: Faker::Lorem.sentence, user_id: user.id) }
-  let(:comment) { Comment.create(id: 1, statement: Faker::Lorem.sentence, post_id: post2.id, user_id: post2.user.id) }
+  let(:unauth_user) { create(:user, :unauthorized) }
+  let(:post2) { create(:post) }
+  let(:user) { post2.user }
+  let(:comment) { Comment.create(id: 1, statement: Faker::Lorem.sentence, post_id: post2.id, user_id: user.id) }
   before(:each) do
     sign_in user
     unauth_user.confirm
@@ -39,12 +36,10 @@ RSpec.describe CommentsController, type: :request do
         before do
           sign_out user
         end
-        it 'is not allowed for signed in user to create comment' do
-          post post_comments_path(post2.id), params: {
-            comment: { user_id: user.id, post_id: post2.id, statement: comment.statement },
-            format: :js
-          }
-          expect(response.body).to eql('You need to sign in or sign up before continuing.')
+        it 'is not allowed for signed out user to create comment' do
+          post post_comments_path(post2.id)
+          follow_redirect!
+          expect(flash[:alert]).to eql('You need to sign in or sign up before continuing.')
         end
         it 'is not allowed for unauthorized user to create comment' do
           sign_in unauth_user
@@ -53,7 +48,7 @@ RSpec.describe CommentsController, type: :request do
             format: :js
           }
           follow_redirect!
-          expect(response.body).to include('You are not authorized to perform this action')
+          expect(flash[:alert]).to eql('You are not authorized to perform this action.')
         end
       end
     end
@@ -62,16 +57,21 @@ RSpec.describe CommentsController, type: :request do
   describe 'Comments/update' do
     context 'Allow comment updation' do
       it 'is allowed for signed in and authorized user to update comment' do
-        patch "/posts/#{post2.id}/comments/#{comment.id}",
+        patch post_comment_path(comment.post.id, comment.id),
               params: { comment: { statement: 'Hellloo', user_id: user.id }, format: :js }
         expect(response.content_type).to eq('text/javascript')
       end
     end
     context 'Do not allow comment creation' do
-      it 'is not allowed to update comment if params are incorrect' do
-        patch "/posts/#{post2.id}/comments/#{comment.id}",
-              params: { comment: { statement: 'Hi', user_id: user.id }, format: :js }
-        expect(response.body).to include('Something went wrong')
+      it 'is not allowed to update comment if params are incorrect-shorter' do
+        patch post_comment_path(comment.post.id, comment.id),
+              params: { comment: { statement: Faker::Lorem.characters(number: 2), user_id: user.id }, format: :js }
+        expect(flash[:alert]).to eql('Something went wrong')
+      end
+      it 'is not allowed to update comment if params are incorrect-longer' do
+        patch post_comment_path(comment.post.id, comment.id),
+              params: { comment: { statement: Faker::Lorem.characters(number: 501), user_id: user.id }, format: :js }
+        expect(flash[:alert]).to eql('Something went wrong')
       end
       context 'User has signed out' do
         before do
@@ -79,19 +79,16 @@ RSpec.describe CommentsController, type: :request do
         end
         it 'is not allowed for unauthorized user to update comment' do
           sign_in unauth_user
-          patch "/posts/#{post2.id}/comments/#{comment.id}", params: {
-            comment: { user_id: unauth_user.id, statement: 'Hello everybody' },
-            format: :js
-          }
+          patch post_comment_path(comment.post.id, comment.id), params: { comment: {
+            statement: Faker::Lorem.sentence, user_id: unauth_user.id
+          }, format: :js }
           follow_redirect!
-          expect(response.body).to include('You are not authorized to perform this action')
+          expect(flash[:alert]).to eql('You are not authorized to perform this action.')
         end
         it 'is not allowed to update comment if user has signed out' do
-          patch "/posts/#{post2.id}/comments/#{comment.id}", params: {
-            comment: { user_id: user.id, statement: 'Hello everybody' },
-            format: :js
-          }
-          expect(response.body).to eql('You need to sign in or sign up before continuing.')
+          patch post_comment_path(comment.post.id, comment.id)
+          follow_redirect!
+          expect(flash[:alert]).to eql('You need to sign in or sign up before continuing.')
         end
       end
     end
@@ -109,14 +106,14 @@ RSpec.describe CommentsController, type: :request do
         sign_out user
         get edit_post_comment_path(comment.post.id, comment.id)
         follow_redirect!
-        expect(response.body).to include('You need to sign in or sign up before continuing.')
+        expect(flash[:alert]).to eql('You need to sign in or sign up before continuing.')
       end
     end
   end
   describe 'Comments/destroy' do
     context 'Allow comment deletion' do
       it 'is allowed for authorized and signed in user to delete comment' do
-        delete "/posts/#{post2.id}/comments/#{comment.id}", params: { comment: { user_id: user.id }, format: :js }
+        delete post_comment_path(comment.post.id, comment.id), params: { format: :js }
         expect(response.content_type).to eq('text/javascript')
       end
     end
@@ -124,8 +121,13 @@ RSpec.describe CommentsController, type: :request do
       it 'is not allowed to delete comment if action return false' do
         allow(Comment).to receive(:find).and_return(comment)
         allow(comment).to receive(:destroy).and_return(false)
-        delete "/posts/#{post2.id}/comments/#{comment.id}", params: { comment: { user_id: nil }, format: :js }
-        expect(response.body).to include('Comment not destroyed')
+        delete post_comment_path(comment.post.id, comment.id), params: { format: :js }
+        expect(flash[:alert]).to eql('Comment not destroyed')
+      end
+      it 'is not allowed to delete comment if nil ids are passed' do
+        expect do
+          delete post_comment_path
+        end.to raise_exception(ActionController::UrlGenerationError)
       end
       context 'User has signed out' do
         before do
@@ -133,14 +135,15 @@ RSpec.describe CommentsController, type: :request do
         end
         it 'is not allowed for unauthorized user to delete comment' do
           sign_in unauth_user
-          delete "/posts/#{post2.id}/comments/#{comment.id}",
-                 params: { comment: { user_id: unauth_user.id }, format: :js }
+          delete post_comment_path(comment.post.id, comment.id),
+                 params: { format: :js }
           follow_redirect!
-          expect(response.body).to include('You are not authorized to perform this action')
+          expect(flash[:alert]).to eql('You are not authorized to perform this action.')
         end
         it 'is not allowed to delete comment if user has signed out' do
-          delete "/posts/#{post2.id}/comments/#{comment.id}", params: { comment: { user_id: user.id }, format: :js }
-          expect(response.body).to eql('You need to sign in or sign up before continuing.')
+          delete post_comment_path(comment.post.id, comment.id)
+          follow_redirect!
+          expect(flash[:alert]).to eql('You need to sign in or sign up before continuing.')
         end
       end
     end
