@@ -25,12 +25,19 @@ RSpec.describe CommentsController, type: :request do
       end
     end
     context 'Do not allow comment creation' do
-      it 'is not allowed to create comment with wrong params' do
+      it 'is not allowed to create comment with wrong params-shorter' do
         post post_comments_path(post2.id), params: {
-          comment: { user_id: user.id, post_id: post2.id, statement: 'Hi' },
+          comment: { user_id: user.id, post_id: post2.id, statement: Faker::Lorem.characters(number: 2) },
           format: :js
         }
         expect(flash[:alert]).to eql(['Statement is too short (minimum is 5 characters)'])
+      end
+      it 'is not allowed to create comment with wrong params-longer' do
+        post post_comments_path(post2.id), params: {
+          comment: { user_id: user.id, post_id: post2.id, statement: Faker::Lorem.characters(number: 503) },
+          format: :js
+        }
+        expect(flash[:alert]).to eql(['Statement is too long (maximum is 500 characters)'])
       end
       context 'User has signed out' do
         before do

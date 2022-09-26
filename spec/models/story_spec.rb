@@ -18,7 +18,7 @@ RSpec.describe Story, type: :model do
         story = build(:story)
         create(:photo, :story_photo)
         story.save
-        expect(!story.photos.nil?).to eq(true)
+        expect(story.photos.exists?).to eq(true)
       end
     end
     context 'Negative validations' do

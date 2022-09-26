@@ -20,7 +20,7 @@ RSpec.describe Post, type: :model do
       it 'validates presence of photos' do
         post = build(:post)
         post.save
-        expect(!post.photos.nil?).to eq(true)
+        expect(post.photos.exists?).to eq(true)
       end
     end
     context 'Negative validations' do
