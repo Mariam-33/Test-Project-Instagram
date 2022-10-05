@@ -4,6 +4,14 @@
 Rails.application.routes.draw do
   root 'home#home'
   devise_for :users
+
+  namespace :api do
+    namespace :v1 do
+      resources :stories, only: %i[index show]
+      resources :relationships, only: [:index]
+    end
+  end
+
   resources :users do
     member do
       get :show

@@ -78,6 +78,7 @@ end
 gem 'figaro'
 gem 'rmagick'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'active_model_serializers'
 gem 'bootstrap', '~> 5.2.0'
 gem 'carrierwave'
 gem 'cloudinary'
@@ -85,6 +86,7 @@ gem 'devise'
 gem 'jquery-rails'
 gem 'letter_opener', group: :development
 gem 'pundit'
+gem 'rack-cors'
 gem 'rails-jquery-autocomplete'
 gem 'ransack', '~> 2.5'
 gem 'sidekiq', '~> 6.5'
