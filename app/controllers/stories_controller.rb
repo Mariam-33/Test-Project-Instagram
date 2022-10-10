@@ -4,15 +4,15 @@
 class StoriesController < ApplicationController
   before_action :set_story, only: %i[show destroy]
   before_action :build_story, only: %i[create]
-  # before_action :authorize_story, only: %i[show destroy]
+  before_action :authorize_story, only: %i[show destroy]
   def index
     @user = if params[:user_id]
               User.find(params[:user_id])
             else
               current_user
             end
-    @stories = @user.stories.includes(:photos).order('created_at DESC')
-    # @stories = policy_scope(@user.stories.includes(:photos).order('created_at DESC'))
+
+    @stories = policy_scope(@user.stories.includes(:photos).order('created_at DESC'))
   end
 
   def show; end
